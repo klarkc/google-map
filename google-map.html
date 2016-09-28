@@ -5,6 +5,8 @@
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="google-map-marker.html">
+<link rel="import" href="google-map-icon.html">
+
 <!--
 The `google-map` element renders a Google Map.
 
@@ -91,7 +93,7 @@ If you're seeing the message "You have included the Google Maps API multiple tim
     <div id="map"></div>
 
     <iron-selector id="selector" multi="[[!singleInfoWindow]]" selected-attribute="open" activate-event="google-map-marker-open" on-google-map-marker-close="_deselectMarker">
-      <content id="markers" select="google-map-marker"></content>
+      <content id="markers" select="google-map-marker google-map-icon"></content>
     </iron-selector>
     <content id="objects" select="*"></content>
   </template>
