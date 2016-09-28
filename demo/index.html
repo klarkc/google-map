@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
   <link rel="import" href="../google-map.html">
   <link rel="import" href="../google-map-marker.html">
+  <link rel="import" href="../google-map-icon.html">
   <link rel="import" href="../google-map-poly.html">
   <link rel="import" href="../google-map-directions.html">
   <style>
@@ -26,6 +27,7 @@
 <template is="dom-bind">
   <google-map latitude="37.779" longitude="-122.3892" min-zoom="9" max-zoom="11"
               language="en" api-key="[[apiKey]]">
+    <google-map-icon latitude="37.780" longitude="-122.3900" icon="icons:home"></google-map-icon>
     <google-map-marker latitude="37.779" longitude="-122.3892"
                        title="Go Giants!" draggable="true" drag-events>
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/San_Francisco_Giants_Cap_Insignia.svg/200px-San_Francisco_Giants_Cap_Insignia.svg.png" />
