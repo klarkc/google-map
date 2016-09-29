@@ -114,9 +114,26 @@
 
         myMarker.appendChild(document.createElement('div'));
         myMarker.set('open', true);
-        
+
         flush(function() {
           myMarker.set('open', false);
+        });
+      });
+    });
+
+    suite('update properties', function(){
+      test('latitude, longitude, zIndex and icon', function(done) {
+        myMarker.set('latitude', 37.77493);
+        myMarker.set('longitude', -122.41942);
+        myMarker.set('zIndex', 1);
+        myMarker.set('icon', 'https://www.google.com/images/srpr/logo11w.png');
+
+        flush(function() {
+          assert.equal(myMarker.marker.getPosition().lat(), myMarker.latitude);
+          assert.equal(myMarker.marker.getPosition().lng(), myMarker.longitude);
+          assert.equal(myMarker.marker.getZIndex(), myMarker.zIndex);
+          assert.equal(myMarker.marker.getIcon(), myMarker.icon);
+          done();
         });
       });
     });
