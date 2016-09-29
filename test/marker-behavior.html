@@ -1,0 +1,126 @@
+<!doctype html>
+<!-- Copyright (c) 2014 Google Inc. All rights reserved. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../google-apis/google-maps-api.html">
+  <link rel="import" href="../marker-behavior.html">
+</head>
+<body>
+  <google-maps-api api-key="AIzaSyD_bfL1kCUIsD0dZ4XxWAO_0W6NstEQ5Pg"></google-maps-api>
+
+  <test-fixture id="MyMarker">
+    <template>
+      <my-map-marker></my-map-marker>
+    </template>
+  </test-fixture>
+  <script>
+  Polymer({
+    is: 'my-map-marker',
+    behaviors: [GoogleMapBehaviors.MarkerBehavior]
+  });
+
+  suite('marker-behavior', function() {
+    var myMarker, map, api;
+
+    suiteSetup(function(done) {
+      var el = document.querySelector('google-maps-api');
+      el.addEventListener('api-load', function(e) {
+        api = e.target.api;
+        done();
+      });
+    });
+
+    setup(function() {
+      myMarker = fixture('MyMarker');
+      map = new api.Map(document.createElement('div'));
+      myMarker.set('map', map);
+    });
+
+    test('default properties', function() {
+      assert.instanceOf(myMarker.marker, google.maps.Marker);
+      assert.equal(myMarker.map, map);
+      assert.isNull(myMarker.info);
+      assert.isFalse(myMarker.clickEvents);
+      assert.isFalse(myMarker.dragEvents);
+      assert.isNull(myMarker.icon);
+      assert.isFalse(myMarker.mouseEvents);
+      assert.equal(myMarker.zIndex, 0);
+      assert.isNull(myMarker.longitude);
+      assert.isNull(myMarker.latitude);
+      assert.isNull(myMarker.animation);
+      assert.isFalse(myMarker.open);
+    });
+
+    suite('test api related events', function() {
+      var events = [
+        'click',
+        'dblclick',
+        'rightclick',
+        'drag',
+        'dragend',
+        'dragstart',
+        'mousedown',
+        'mousemove',
+        'mouseout',
+        'mouseover',
+        'mouseup',
+        'rightclick'
+      ];
+
+      setup(function() {
+        myMarker.set('clickEvents', true);
+        myMarker.set('dragEvents', true);
+        myMarker.set('mouseEvents', true);
+      });
+
+      events.forEach(function(name) {
+        var prefix = 'google-map-marker-';
+        test(prefix + name + ' event', function(done){
+          myMarker.addEventListener(prefix + name, function(e){
+            assert.equal(e.target, myMarker);
+            done();
+          });
+          flush(function() {
+            api.event.trigger(myMarker.marker, name);
+          });
+        });
+      });
+    });
+
+    suite('test element events', function(){
+      test('google-map-marker-open event', function(done){
+        myMarker.addEventListener('google-map-marker-open', function(e) {
+          assert.equal(e.target, myMarker);
+          done();
+        });
+
+        myMarker.appendChild(document.createElement('div'));
+
+        flush(function() {
+          api.event.trigger(myMarker.marker, 'click');
+        });
+      });
+
+      test('google-map-marker-close event', function(done){
+        myMarker.addEventListener('google-map-marker-close', function(e) {
+          assert.equal(e.target, myMarker);
+          done();
+        });
+
+        myMarker.appendChild(document.createElement('div'));
+        myMarker.set('open', true);
+        
+        flush(function() {
+          myMarker.set('open', false);
+        });
+      });
+    });
+  });
+  </script>
+</body>
+</html>
